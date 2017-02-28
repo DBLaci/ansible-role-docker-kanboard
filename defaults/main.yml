@@ -1,0 +1,4 @@
+---
+kanboard_port: 9020
+kanboard_dir_data: /opt/kanboard/data
+kanboard_dir_plugins: /opt/kanboard/plugins

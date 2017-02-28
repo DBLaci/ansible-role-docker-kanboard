@@ -1,0 +1,29 @@
+---
+
+- name: Create persistent data directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: 100
+    group: 101
+    mode: 0700
+  with_items:
+      - "{{ kanboard_dir_data }}"
+      - "{{ kanboard_dir_plugins }}"
+
+- name: 'Start the KanBoard docker container'
+  docker_container:
+    image: "kanboard/kanboard"
+    name: "kanboard"
+    state: 'started'
+    restart_policy: 'always'
+    # log_driver: json-file
+    log_driver: 'syslog'
+    log_options:
+      tag: "kanboard"
+    volumes:
+      - "{{ kanboard_dir_data }}:/var/www/app/data"
+      - "{{ kanboard_dir_plugins }}:/var/www/app/plugins"
+    ports:
+#      - "127.0.0.1:8000:80"
+      - "{{ kanboard_port }}:80"
